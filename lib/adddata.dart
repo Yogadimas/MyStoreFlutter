@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:my_store_flutter/readdata.dart';
+import 'package:my_store_flutter/main.dart';
 
 class AddData extends StatefulWidget {
   // const AddData({ Key? key }) : super(key: key);
@@ -16,7 +16,7 @@ class _AddDataState extends State<AddData> {
   TextEditingController controllerStock = TextEditingController();
 
   void addData() {
-    var url = "https://yogadimasproject.000webhostapp.com/adddata.php";
+    var url = "https://yogadimasproject.nasiwebhost.com/adddata.php";
     http.post(Uri.parse(url), body: {
       "itemcode": controllerCode.text,
       "itemname": controllerName.text,
@@ -58,10 +58,13 @@ class _AddDataState extends State<AddData> {
                 ElevatedButton(
                     onPressed: () {
                       addData();
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) => ReadData()));
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                MyApp()), // this mymainpage is your page to refresh
+                        (Route<dynamic> route) => false,
+                      );
                     },
                     child: Text('Add Data'))
               ],

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:my_store_flutter/editdata.dart';
 
 class Detail extends StatefulWidget {
   // const Detail({ Key? key }) : super(key: key);
   List? list;
   int? index;
-  Detail({this.index, this.list});
+  final VoidCallback? reload;
+  Detail({this.index, this.list, this.reload});
 
   @override
   State<Detail> createState() => _DetailState();
@@ -38,7 +40,15 @@ class _DetailState extends State<Detail> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context, 
+                          MaterialPageRoute(
+                            builder: (context) => EditData(
+                              list: widget.list,
+                              index: widget.index,
+                            )));
+                      },
                       child: Text("Edit"),
                       style: ElevatedButton.styleFrom(primary: Colors.green),
                     ),
