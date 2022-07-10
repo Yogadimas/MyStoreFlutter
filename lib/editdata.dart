@@ -83,7 +83,7 @@ class _EditDataState extends State<EditData> {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            MyApp()), // this mymainpage is your page to refresh
+                            MyApp()),
                     (Route<dynamic> route) => false,
                   );
                 },

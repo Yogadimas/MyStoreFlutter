@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:my_store_flutter/editdata.dart';
+import 'package:http/http.dart' as http;
+import 'package:my_store_flutter/readdata.dart';
+
+import 'main.dart';
 
 class Detail extends StatefulWidget {
   // const Detail({ Key? key }) : super(key: key);
@@ -13,6 +17,38 @@ class Detail extends StatefulWidget {
 }
 
 class _DetailState extends State<Detail> {
+  void deleteData() {
+    var url = "https://yogadimasproject.nasiwebhost.com/deletedata.php";
+    http.post(Uri.parse(url),
+        body: {'id': (widget.list as dynamic)[widget.index]['id']});
+  }
+
+  void confirm() {
+    showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+              content: Text(
+                  "Are You Sure Want To Delete ${(widget.list as dynamic)[widget.index]['item_name']}"),
+              actions: [
+                TextButton(
+                    onPressed: () => Navigator.pop(context, 'Cancel'),
+                    child: const Text('Cancel')),
+                TextButton(
+                    onPressed: () {
+                      deleteData();
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                MyApp()), 
+                        (Route<dynamic> route) => false,
+                      );
+                    },
+                    child: const Text('OK'))
+              ],
+            ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,19 +78,21 @@ class _DetailState extends State<Detail> {
                     ElevatedButton(
                       onPressed: () {
                         Navigator.pushReplacement(
-                          context, 
-                          MaterialPageRoute(
-                            builder: (context) => EditData(
-                              list: widget.list,
-                              index: widget.index,
-                            )));
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditData(
+                                      list: widget.list,
+                                      index: widget.index,
+                                    )));
                       },
                       child: Text("Edit"),
                       style: ElevatedButton.styleFrom(primary: Colors.green),
                     ),
                     SizedBox(width: 10),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        confirm();
+                      },
                       child: Text("Delete"),
                       style: ElevatedButton.styleFrom(primary: Colors.red),
                     ),

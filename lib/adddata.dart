@@ -62,7 +62,7 @@ class _AddDataState extends State<AddData> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                MyApp()), // this mymainpage is your page to refresh
+                                MyApp()),
                         (Route<dynamic> route) => false,
                       );
                     },
