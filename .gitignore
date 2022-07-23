@@ -48,3 +48,5 @@ app.*.map.json
 #rsa
 mystoreflutter_rsa
 mystoreflutter_rsa.pub
+
+/lib/readdata_backup.dart

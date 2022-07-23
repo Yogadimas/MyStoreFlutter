@@ -13,14 +13,28 @@ class ReadData extends StatefulWidget {
 }
 
 class _ReadDataState extends State<ReadData> {
-
-
-
+  List items = [];
   Future<List> getData() async {
     const String linkGetData =
         'https://yogadimasproject.nasiwebhost.com/getdata.php';
     final response = await http.get(Uri.parse(linkGetData));
+    items = json.decode(response.body);
     return json.decode(response.body);
+  }
+
+  Future refresh() async {
+    setState(() {
+      items.clear();
+    });
+    setState(() {
+      getData();
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
   }
 
   @override
@@ -40,48 +54,64 @@ class _ReadDataState extends State<ReadData> {
         future: getData(),
         builder: (context, snapshot) {
           if (snapshot.hasError) print(snapshot.error);
-          return snapshot.hasData
-              ? ItemList(
-                  list: snapshot.data ?? [],
-                )
-              : Center(
-                  child: CircularProgressIndicator(),
-                );
+          Widget widget;
+          if (snapshot.hasData) {
+            if (items.isNotEmpty) {
+              widget = RefreshIndicator(
+                onRefresh: refresh,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Text("Swipe down to refresh the page"),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount:
+                            snapshot.data == null ? 0 : snapshot.data?.length,
+                        itemBuilder: (context, i) {
+                          return Container(
+                            padding: EdgeInsets.all(10),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (BuildContext context) => Detail(
+                                          list: snapshot.data ?? [],
+                                          index: i,
+                                        )));
+                              },
+                              child: Card(
+                                child: ListTile(
+                                  leading: Icon(Icons.widgets),
+                                  title: Text(snapshot.data?[i]['item_name']),
+                                  subtitle: Text(
+                                      "Stock : ${snapshot.data?[i]['stock']}"),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    )
+                  ],
+                ),
+              );
+            } else {
+              widget = Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          } else {
+            widget = Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return widget;
         },
       ),
-    );
-  }
-}
-
-class ItemList extends StatelessWidget {
-  final List? list;
-  ItemList({this.list});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: list == null ? 0 : list?.length,
-      itemBuilder: (context, i) {
-        return Container(
-          padding: EdgeInsets.all(10),
-          child: GestureDetector(
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => Detail(
-                        list: list,
-                        index: i,
-                      )));
-            },
-            child: Card(
-              child: ListTile(
-                leading: Icon(Icons.widgets),
-                title: Text(list?[i]['item_name']),
-                subtitle: Text("Stock : ${list?[i]['stock']}"),
-              ),
-            ),
-          ),
-        );
-      },
     );
   }
 }
