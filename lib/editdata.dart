@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:my_store_flutter/detaildata.dart';
 import 'package:my_store_flutter/main.dart';
+import 'package:my_store_flutter/themes/themes.dart';
 
 class EditData extends StatefulWidget {
   // const EditData({ Key? key }) : super(key: key);
@@ -45,50 +47,68 @@ class _EditDataState extends State<EditData> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Edit Data"),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(children: [
-            TextField(
-              controller: controllerCode,
-              decoration: InputDecoration(
-                  hintText: "Item Code", labelText: "Item Code"),
-            ),
-            TextField(
-              controller: controllerName,
-              decoration: InputDecoration(
-                  hintText: "Item Name", labelText: "Item Name"),
-            ),
-            TextField(
-              controller: controllerPrice,
-              decoration:
-                  InputDecoration(hintText: "Price", labelText: "Price"),
-            ),
-            TextField(
-              controller: controllerStock,
-              decoration:
-                  InputDecoration(hintText: "Stock", labelText: "Stock"),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            ElevatedButton(
-                onPressed: () {
-                  editData();
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            MyApp()),
-                    (Route<dynamic> route) => false,
-                  );
-                },
-                child: Text("Edit Data"))
-          ]),
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Detail(
+                    list: widget.list,
+                    index: widget.index,
+                  )),
+        );
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Edit Data"),
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(children: [
+              TextField(
+                style: mediumTextStyle,
+                controller: controllerCode,
+                decoration: InputDecoration(
+                    hintText: "Item Code", labelText: "Item Code", labelStyle: TextStyle(fontSize: 20)),
+              ),
+              SizedBox(height: 15,),
+              TextField(
+                      style: mediumTextStyle,
+                controller: controllerName,
+                decoration: InputDecoration(
+                    hintText: "Item Name", labelText: "Item Name", labelStyle: TextStyle(fontSize: 20)),
+              ),
+               SizedBox(height: 15,),
+              TextField(
+                      style: mediumTextStyle,
+                controller: controllerPrice,
+                decoration:
+                    InputDecoration(hintText: "Price", labelText: "Price", labelStyle: TextStyle(fontSize: 20)),
+              ),
+               SizedBox(height: 15,),
+              TextField(
+                      style: mediumTextStyle,
+                controller: controllerStock,
+                decoration:
+                    InputDecoration(hintText: "Stock", labelText: "Stock", labelStyle: TextStyle(fontSize: 20)),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    editData();
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => MyApp()),
+                      (Route<dynamic> route) => false,
+                    );
+                  },
+                  child: Text("Edit Data", style: buttonTextStyle))
+            ]),
+          ),
         ),
       ),
     );

@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:my_store_flutter/adddata.dart';
 import 'package:my_store_flutter/detaildata.dart';
+import 'package:my_store_flutter/themes/themes.dart';
 
 class ReadData extends StatefulWidget {
   // const ReadData({Key? key}) : super(key: key);
@@ -85,10 +86,17 @@ class _ReadDataState extends State<ReadData> {
                               },
                               child: Card(
                                 child: ListTile(
-                                  leading: Icon(Icons.widgets),
-                                  title: Text(snapshot.data?[i]['item_name']),
+                                  leading: Icon(Icons.widgets_rounded),
+                                  title: Text(
+                                    snapshot.data?[i]['item_name'],
+                                    style: mediumTextStyle,
+                                  ),
                                   subtitle: Text(
-                                      "Stock : ${snapshot.data?[i]['stock']}"),
+                                    "Stock : ${snapshot.data?[i]['stock']}",
+                                    style: mediumTextStyle.copyWith(
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: 15),
+                                  ),
                                 ),
                               ),
                             ),
